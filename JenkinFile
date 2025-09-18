@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/waypointcns/Multi-stage-2' // Replace with your Git repository URL
+            }
+        }
+
+        stage('Maven Build') {
+            steps {
+                dir('java-app') { // Assuming your Java app is in a 'java-app' directory
+                    sh 'mvn clean install'
+                }
+            }
+        }
+
+        stage('React Build') {
+            tools {
+                nodejs 'sample' // Replace with the name of your NodeJS tool configuration in Jenkins
+            }
+            steps {
+                dir('frontend') { // Assuming your React app is in a 'frontend' directory
+                    sh 'npm install'
+                    sh 'npm run build' // Or your specific build command for React
+                }
+            }
+        }
+
+        stage('Package/Deploy') {
+            steps {
+                // Example: Copy built React assets to Maven target directory
+                // or package both into a single artifact (e.g., WAR, JAR with embedded resources)
+                // This stage will depend on your specific deployment strategy.
+                echo 'Packaging or deploying the application...'
+                // Example: archiveArtifacts artifacts: 'java-app/target/*.jar, frontend/build/**'
+            }
+        }
+
+        stage('Hello World Output') {
+            steps {
+                echo 'Hello World from the multi-stage build!'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+        success {
+            echo 'Build successful!'
+        }
+        failure {
+            echo 'Build failed!'
+        }
+    }
+}
