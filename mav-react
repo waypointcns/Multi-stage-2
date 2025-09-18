@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'YOUR_REPOSITORY_URL' // Replace with your Git repository URL
+                git 'https://github.com/waypointcns/Multi-stage-2' // Replace with your Git repository URL
             }
         }
 
@@ -18,7 +18,7 @@ pipeline {
 
         stage('React Build') {
             tools {
-                nodejs 'YOUR_NODEJS_TOOL_NAME' // Replace with the name of your NodeJS tool configuration in Jenkins
+                nodejs 'sample' // Replace with the name of your NodeJS tool configuration in Jenkins
             }
             steps {
                 dir('frontend') { // Assuming your React app is in a 'frontend' directory
